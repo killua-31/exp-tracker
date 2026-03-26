@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.database import init_db
-from app.routers import accounts, credit_cards, categories, preferences, transactions
+from app.routers import accounts, credit_cards, categories, preferences, transactions, dashboard, budgets
 
 
 @asynccontextmanager
@@ -29,3 +29,12 @@ app.include_router(credit_cards.router, prefix="/api/v1")
 app.include_router(categories.router, prefix="/api/v1")
 app.include_router(preferences.router, prefix="/api/v1")
 app.include_router(transactions.router, prefix="/api/v1")
+app.include_router(dashboard.router, prefix="/api/v1")
+app.include_router(budgets.router, prefix="/api/v1")
+
+
+@app.post("/api/v1/seed")
+async def run_seed():
+    from app.seed import seed
+    await seed()
+    return {"ok": True}
