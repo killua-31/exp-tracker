@@ -16,10 +16,11 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="FinTrack API", version="1.0.0", lifespan=lifespan)
 
+origins = settings.cors_origins_list
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins_list,
-    allow_credentials=True,
+    allow_origins=origins,
+    allow_credentials=False if origins == ["*"] else True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
