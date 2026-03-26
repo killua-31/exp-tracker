@@ -10,7 +10,8 @@ import { CategoryGridModal } from './category-grid-modal'
 import { useUIStore } from '@/stores/ui-store'
 import { useCategories } from '@/hooks/useTransactions'
 import { useAccounts, useCreditCards } from '@/hooks/useAccounts'
-import { createQuickTransaction } from '@/lib/api'
+import { createTransaction } from '@/lib/api'
+import { Repeat } from 'lucide-react'
 import type { SourceType, CategoryType } from '@/types'
 import { cn } from '@/lib/utils'
 
@@ -35,6 +36,8 @@ export function QuickAddSheet() {
   const [note, setNote] = useState('')
   const [showNote, setShowNote] = useState(false)
   const [showCategoryGrid, setShowCategoryGrid] = useState(false)
+  const [isRecurring, setIsRecurring] = useState(false)
+  const [recurringFrequency, setRecurringFrequency] = useState('monthly')
 
   const amountRef = useRef<HTMLInputElement>(null)
 
@@ -67,11 +70,13 @@ export function QuickAddSheet() {
     setNote('')
     setShowNote(false)
     setShowCategoryGrid(false)
+    setIsRecurring(false)
+    setRecurringFrequency('monthly')
   }, [])
 
   const queryClient = useQueryClient()
   const mutation = useMutation({
-    mutationFn: createQuickTransaction,
+    mutationFn: createTransaction,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
@@ -104,13 +109,19 @@ export function QuickAddSheet() {
     mutation.mutate({
       type,
       amount: parsedAmount,
+      currency: 'CAD',
       category_id: categoryId,
       source_type: sourceType,
       source_id: sourceId,
-      merchant: merchant || undefined,
+      destination_type: null,
+      destination_id: null,
+      merchant: merchant || null,
       date,
-      note: note || undefined,
-    } as Parameters<typeof createQuickTransaction>[0])
+      note: note || null,
+      tags: [],
+      is_recurring: isRecurring,
+      recurring_rule: isRecurring ? { frequency: recurringFrequency } : null,
+    } as Parameters<typeof createTransaction>[0])
   }
 
   const canSave = parseFloat(amount) > 0 && categoryId && sourceId
@@ -120,7 +131,7 @@ export function QuickAddSheet() {
       <BottomSheet
         isOpen={quickAddOpen}
         onClose={closeQuickAdd}
-        className="max-h-[55vh]"
+        className="max-h-[65vh]"
       >
         <div className="flex flex-col gap-4">
           {/* Type toggle */}
@@ -233,6 +244,34 @@ export function QuickAddSheet() {
                   />
                 </motion.div>
               </AnimatePresence>
+            )}
+          </div>
+
+          {/* Recurring toggle */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsRecurring(!isRecurring)}
+              className={cn(
+                'flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition-all',
+                isRecurring
+                  ? 'border-accent-500 bg-accent-50 text-accent-700 dark:bg-accent-950 dark:text-accent-300'
+                  : 'border-slate-200 text-slate-500 hover:border-slate-300 dark:border-slate-700 dark:text-slate-400'
+              )}
+            >
+              <Repeat size={14} />
+              Recurring
+            </button>
+            {isRecurring && (
+              <select
+                value={recurringFrequency}
+                onChange={(e) => setRecurringFrequency(e.target.value)}
+                className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-700 outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+              >
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+              </select>
             )}
           </div>
 
