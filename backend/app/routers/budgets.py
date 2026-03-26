@@ -16,7 +16,7 @@ from app.services import budget_service
 router = APIRouter(prefix="/budgets", tags=["budgets"])
 
 
-@router.get("/", response_model=List[BudgetResponse])
+@router.get("", response_model=List[BudgetResponse])
 async def list_budgets(
     month: Optional[int] = Query(None),
     year: Optional[int] = Query(None),
@@ -32,7 +32,7 @@ async def list_budgets(
     return result.scalars().all()
 
 
-@router.post("/", response_model=BudgetResponse, status_code=201)
+@router.post("", response_model=BudgetResponse, status_code=201)
 async def create_budget(data: BudgetCreate, db: AsyncSession = Depends(get_db)):
     # UPSERT: check if budget exists for same category_id + month + year
     if data.category_id is not None:

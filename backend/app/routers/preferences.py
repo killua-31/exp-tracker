@@ -13,13 +13,13 @@ from app.schemas.preference import PreferenceUpdate, PreferenceResponse
 router = APIRouter(prefix="/preferences", tags=["preferences"])
 
 
-@router.get("/", response_model=List[PreferenceResponse])
+@router.get("", response_model=List[PreferenceResponse])
 async def list_preferences(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(UserPreference))
     return result.scalars().all()
 
 
-@router.put("/", response_model=List[PreferenceResponse])
+@router.put("", response_model=List[PreferenceResponse])
 async def upsert_preferences(
     data: List[PreferenceUpdate],
     db: AsyncSession = Depends(get_db),

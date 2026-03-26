@@ -14,7 +14,7 @@ from app.schemas.credit_card import CreditCardCreate, CreditCardUpdate, CreditCa
 router = APIRouter(prefix="/credit-cards", tags=["credit-cards"])
 
 
-@router.get("/", response_model=List[CreditCardResponse])
+@router.get("", response_model=List[CreditCardResponse])
 async def list_credit_cards(db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(CreditCard).where(CreditCard.is_active == True).order_by(CreditCard.created_at)
@@ -22,7 +22,7 @@ async def list_credit_cards(db: AsyncSession = Depends(get_db)):
     return result.scalars().all()
 
 
-@router.post("/", response_model=CreditCardResponse, status_code=201)
+@router.post("", response_model=CreditCardResponse, status_code=201)
 async def create_credit_card(data: CreditCardCreate, db: AsyncSession = Depends(get_db)):
     card = CreditCard(**data.model_dump())
     db.add(card)

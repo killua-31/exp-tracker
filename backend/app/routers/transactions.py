@@ -131,7 +131,7 @@ async def export_transactions(
     )
 
 
-@router.get("/", response_model=List[TransactionResponse])
+@router.get("", response_model=List[TransactionResponse])
 async def list_transactions(
     db: AsyncSession = Depends(get_db),
     category_id: Optional[uuid.UUID] = Query(None),
@@ -160,7 +160,7 @@ async def list_transactions(
     return result.scalars().all()
 
 
-@router.post("/", response_model=TransactionResponse, status_code=201)
+@router.post("", response_model=TransactionResponse, status_code=201)
 async def create_transaction(
     data: TransactionCreate, db: AsyncSession = Depends(get_db)
 ):

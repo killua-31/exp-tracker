@@ -14,7 +14,7 @@ from app.schemas.category import CategoryCreate, CategoryUpdate, CategoryRespons
 router = APIRouter(prefix="/categories", tags=["categories"])
 
 
-@router.get("/", response_model=List[CategoryResponse])
+@router.get("", response_model=List[CategoryResponse])
 async def list_categories(db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(Category).order_by(Category.sort_order)
@@ -22,7 +22,7 @@ async def list_categories(db: AsyncSession = Depends(get_db)):
     return result.scalars().all()
 
 
-@router.post("/", response_model=CategoryResponse, status_code=201)
+@router.post("", response_model=CategoryResponse, status_code=201)
 async def create_category(data: CategoryCreate, db: AsyncSession = Depends(get_db)):
     category = Category(**data.model_dump(), is_default=False)
     db.add(category)

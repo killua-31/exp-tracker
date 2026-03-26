@@ -14,7 +14,7 @@ from app.schemas.account import AccountCreate, AccountUpdate, AccountResponse
 router = APIRouter(prefix="/accounts", tags=["accounts"])
 
 
-@router.get("/", response_model=List[AccountResponse])
+@router.get("", response_model=List[AccountResponse])
 async def list_accounts(db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(Account).where(Account.is_active == True).order_by(Account.created_at)
@@ -22,7 +22,7 @@ async def list_accounts(db: AsyncSession = Depends(get_db)):
     return result.scalars().all()
 
 
-@router.post("/", response_model=AccountResponse, status_code=201)
+@router.post("", response_model=AccountResponse, status_code=201)
 async def create_account(data: AccountCreate, db: AsyncSession = Depends(get_db)):
     account = Account(**data.model_dump())
     db.add(account)
