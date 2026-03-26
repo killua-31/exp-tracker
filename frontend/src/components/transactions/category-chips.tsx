@@ -18,7 +18,7 @@ export function CategoryChips({ selectedId, onSelect, type, categories, onMoreCl
     .slice(0, 8)
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none" style={{ scrollbarWidth: 'none' }}>
+    <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 scrollbar-none" style={{ scrollbarWidth: 'none' }}>
       {filtered.map((cat) => (
         <button
           key={cat.id}

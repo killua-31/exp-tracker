@@ -32,7 +32,7 @@ export function BottomSheet({ isOpen, onClose, title, children, className }: Bot
           />
           <motion.div
             className={cn(
-              'fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-3xl bg-white p-5 pt-3 shadow-elevated dark:bg-slate-900',
+              'fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto overflow-x-hidden rounded-t-3xl bg-white px-5 pb-5 pt-3 shadow-elevated dark:bg-slate-900',
               className
             )}
             initial={{ y: '100%' }}

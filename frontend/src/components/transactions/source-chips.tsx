@@ -32,7 +32,7 @@ export function SourceChips({
   const activeCards = creditCards.filter((c) => c.is_active)
 
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+    <div className="-mx-5 flex items-center gap-2 overflow-x-auto px-5 pb-1" style={{ scrollbarWidth: 'none' }}>
       {activeAccounts.map((acc) => (
         <button
           key={acc.id}
