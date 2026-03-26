@@ -1,0 +1,241 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createCreditCard, updateCreditCard } from '@/lib/api'
+import { useUIStore } from '@/stores/ui-store'
+import type { CreditCard } from '@/types'
+
+const PRESET_COLORS = [
+  '#3b82f6', '#8b5cf6', '#14b8a6', '#f59e0b',
+  '#ef4444', '#ec4899', '#6366f1', '#0ea5e9',
+]
+
+interface CreditCardFormModalProps {
+  isOpen: boolean
+  onClose: () => void
+  card?: CreditCard
+}
+
+export function CreditCardFormModal({ isOpen, onClose, card }: CreditCardFormModalProps) {
+  const addToast = useUIStore((s) => s.addToast)
+  const qc = useQueryClient()
+  const isEdit = !!card
+
+  const [name, setName] = useState('')
+  const [issuer, setIssuer] = useState('')
+  const [network, setNetwork] = useState('')
+  const [creditLimit, setCreditLimit] = useState('')
+  const [outstandingBalance, setOutstandingBalance] = useState('')
+  const [statementDay, setStatementDay] = useState('')
+  const [dueDay, setDueDay] = useState('')
+  const [color, setColor] = useState(PRESET_COLORS[0])
+
+  useEffect(() => {
+    if (card) {
+      setName(card.name)
+      setIssuer(card.issuer ?? '')
+      setNetwork(card.network ?? '')
+      setCreditLimit(card.credit_limit.toString())
+      setOutstandingBalance(card.outstanding_balance.toString())
+      setStatementDay(card.statement_day?.toString() ?? '')
+      setDueDay(card.due_day?.toString() ?? '')
+      setColor(card.color)
+    } else {
+      setName('')
+      setIssuer('')
+      setNetwork('')
+      setCreditLimit('')
+      setOutstandingBalance('0')
+      setStatementDay('')
+      setDueDay('')
+      setColor(PRESET_COLORS[0])
+    }
+  }, [card, isOpen])
+
+  const mutation = useMutation({
+    mutationFn: (data: Partial<CreditCard>) =>
+      isEdit ? updateCreditCard(card!.id, data) : createCreditCard(data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['credit-cards'] })
+      qc.invalidateQueries({ queryKey: ['dashboard'] })
+      addToast(isEdit ? 'Credit card updated' : 'Credit card added', 'success')
+      onClose()
+    },
+    onError: () => {
+      addToast('Failed to save credit card', 'error')
+    },
+  })
+
+  function handleSave() {
+    if (!name.trim()) {
+      addToast('Please enter a card name', 'error')
+      return
+    }
+    mutation.mutate({
+      name: name.trim(),
+      issuer: issuer || null,
+      network: network || null,
+      credit_limit: parseFloat(creditLimit) || 0,
+      outstanding_balance: parseFloat(outstandingBalance) || 0,
+      statement_day: statementDay ? parseInt(statementDay) : null,
+      due_day: dueDay ? parseInt(dueDay) : null,
+      color,
+      icon: 'credit-card',
+      currency: 'CAD',
+    })
+  }
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            className="fixed inset-0 z-40 bg-black/50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+          />
+          <motion.div
+            className="fixed inset-x-4 top-1/2 z-50 max-h-[85vh] overflow-y-auto max-w-md mx-auto -translate-y-1/2 rounded-2xl bg-white p-6 shadow-elevated dark:bg-slate-900"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+          >
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                {isEdit ? 'Edit Credit Card' : 'New Credit Card'}
+              </h2>
+              <button
+                onClick={onClose}
+                className="rounded-full p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800"
+              >
+                <X className="h-5 w-5 text-slate-500" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Card name"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 outline-none focus:border-accent-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Issuer</label>
+                  <input
+                    type="text"
+                    value={issuer}
+                    onChange={(e) => setIssuer(e.target.value)}
+                    placeholder="e.g. RBC"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 outline-none focus:border-accent-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Network</label>
+                  <input
+                    type="text"
+                    value={network}
+                    onChange={(e) => setNetwork(e.target.value)}
+                    placeholder="e.g. Visa"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 outline-none focus:border-accent-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Credit Limit</label>
+                <input
+                  type="number"
+                  value={creditLimit}
+                  onChange={(e) => setCreditLimit(e.target.value)}
+                  placeholder="0.00"
+                  step="0.01"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 outline-none focus:border-accent-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Outstanding Balance</label>
+                <input
+                  type="number"
+                  value={outstandingBalance}
+                  onChange={(e) => setOutstandingBalance(e.target.value)}
+                  placeholder="0.00"
+                  step="0.01"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 outline-none focus:border-accent-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Statement Day</label>
+                  <input
+                    type="number"
+                    value={statementDay}
+                    onChange={(e) => setStatementDay(e.target.value)}
+                    placeholder="e.g. 15"
+                    min="1"
+                    max="31"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 outline-none focus:border-accent-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Due Day</label>
+                  <input
+                    type="number"
+                    value={dueDay}
+                    onChange={(e) => setDueDay(e.target.value)}
+                    placeholder="e.g. 5"
+                    min="1"
+                    max="31"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-900 outline-none focus:border-accent-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Color</label>
+                <div className="flex gap-2">
+                  {PRESET_COLORS.map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setColor(c)}
+                      className={`h-8 w-8 rounded-full transition-transform ${color === c ? 'scale-110 ring-2 ring-offset-2 ring-slate-400' : ''}`}
+                      style={{ backgroundColor: c }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex gap-3">
+              <Button variant="secondary" className="flex-1" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                className="flex-1"
+                onClick={handleSave}
+                disabled={mutation.isPending}
+              >
+                {mutation.isPending ? 'Saving...' : 'Save'}
+              </Button>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  )
+}

@@ -66,6 +66,9 @@ export async function getTransactions(params?: Record<string, string>) {
   const query = params ? '?' + new URLSearchParams(params).toString() : ''
   return api<Transaction[]>(`/transactions${query}`)
 }
+export async function getTransaction(id: string) {
+  return api<Transaction>(`/transactions/${id}`)
+}
 export async function createTransaction(data: Partial<Transaction>) {
   return api<Transaction>('/transactions', { method: 'POST', body: JSON.stringify(data) })
 }
