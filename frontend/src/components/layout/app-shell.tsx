@@ -3,6 +3,7 @@
 import { Sidebar } from './sidebar'
 import { BottomNav } from './bottom-nav'
 import { FAB } from './fab'
+import { QuickAddSheet } from '@/components/transactions/quick-add-sheet'
 
 interface AppShellProps {
   children: React.ReactNode
@@ -17,6 +18,7 @@ export function AppShell({ children }: AppShellProps) {
       </main>
       <BottomNav />
       <FAB />
+      <QuickAddSheet />
     </>
   )
 }
