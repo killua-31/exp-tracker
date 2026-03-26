@@ -13,6 +13,7 @@ import {
   useDeleteTransaction,
 } from '@/hooks/useTransactions'
 import { useUIStore } from '@/stores/ui-store'
+import { DynamicIcon } from '@/components/ui/dynamic-icon'
 import type { Transaction, TransactionType } from '@/types'
 
 const TRANSACTION_TYPES: { value: TransactionType; label: string }[] = [
@@ -228,10 +229,10 @@ export function TransactionForm({ initialData, onSuccess }: TransactionFormProps
             {selectedCategory ? (
               <>
                 <span
-                  className="flex h-7 w-7 items-center justify-center rounded-full text-sm"
+                  className="flex h-7 w-7 items-center justify-center rounded-full"
                   style={{ backgroundColor: selectedCategory.color + '22', color: selectedCategory.color }}
                 >
-                  {selectedCategory.icon}
+                  <DynamicIcon name={selectedCategory.icon} size={16} />
                 </span>
                 <span className="font-medium text-slate-900 dark:text-slate-100">
                   {selectedCategory.name}

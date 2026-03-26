@@ -194,3 +194,11 @@ async def update_transaction(
 async def delete_transaction(txn_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
     await transaction_service.delete_transaction(db, txn_id)
     return {"ok": True}
+
+
+@router.post("/process-recurring")
+async def process_recurring(db: AsyncSession = Depends(get_db)):
+    """Process all recurring transactions that are due. Creates new transaction instances
+    for any recurring templates whose next due date has passed."""
+    created = await transaction_service.process_recurring_transactions(db)
+    return {"processed": len(created), "transactions": created}

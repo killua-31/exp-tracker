@@ -183,6 +183,89 @@ async def delete_transaction(db: AsyncSession, txn_id: uuid.UUID) -> None:
     await db.commit()
 
 
+async def process_recurring_transactions(db: AsyncSession) -> list:
+    """Find all recurring transactions due for execution and create new instances."""
+    from datetime import date as date_type, timedelta
+    from dateutil.relativedelta import relativedelta
+
+    today = date_type.today()
+
+    # Get all recurring transactions
+    result = await db.execute(
+        select(Transaction).where(
+            Transaction.is_recurring == True,
+            Transaction.recurring_rule.isnot(None),
+        )
+    )
+    recurring = result.scalars().all()
+
+    created = []
+    for txn in recurring:
+        rule = txn.recurring_rule or {}
+        frequency = rule.get("frequency", "monthly")
+        last_date = txn.date
+
+        # Calculate next due date from the original transaction date
+        if frequency == "weekly":
+            delta = timedelta(weeks=1)
+        elif frequency == "monthly":
+            delta = relativedelta(months=1)
+        elif frequency == "yearly":
+            delta = relativedelta(years=1)
+        else:
+            continue
+
+        next_date = last_date + delta if frequency == "weekly" else last_date + delta
+
+        # Create transactions for all missed dates up to today
+        while next_date <= today:
+            # Check if this date already has a matching transaction
+            check = await db.execute(
+                select(Transaction).where(
+                    Transaction.category_id == txn.category_id,
+                    Transaction.source_id == txn.source_id,
+                    Transaction.amount == txn.amount,
+                    Transaction.date == next_date,
+                    Transaction.type == txn.type,
+                    Transaction.is_recurring == False,
+                )
+            )
+            existing = check.scalar_one_or_none()
+
+            if not existing:
+                new_data = TransactionCreate(
+                    type=txn.type,
+                    amount=float(txn.amount),
+                    currency=txn.currency,
+                    category_id=txn.category_id,
+                    source_type=txn.source_type,
+                    source_id=txn.source_id,
+                    destination_type=txn.destination_type,
+                    destination_id=txn.destination_id,
+                    merchant=txn.merchant,
+                    note=f"[Recurring] {txn.note or ''}".strip(),
+                    tags=txn.tags or [],
+                    date=next_date,
+                    is_recurring=False,
+                    recurring_rule=None,
+                )
+                new_txn = await create_transaction(db, new_data)
+                created.append({
+                    "id": str(new_txn.id),
+                    "type": new_txn.type.value if hasattr(new_txn.type, 'value') else new_txn.type,
+                    "amount": float(new_txn.amount),
+                    "date": str(new_txn.date),
+                    "merchant": new_txn.merchant,
+                })
+
+            if frequency == "weekly":
+                next_date = next_date + delta
+            else:
+                next_date = next_date + delta
+
+    return created
+
+
 async def create_quick_transaction(
     db: AsyncSession, data: QuickTransactionCreate
 ) -> Transaction:
