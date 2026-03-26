@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.database import init_db
-from app.routers import accounts, credit_cards, categories, preferences
+from app.routers import accounts, credit_cards, categories, preferences, transactions
 
 
 @asynccontextmanager
@@ -28,3 +28,4 @@ app.include_router(accounts.router, prefix="/api/v1")
 app.include_router(credit_cards.router, prefix="/api/v1")
 app.include_router(categories.router, prefix="/api/v1")
 app.include_router(preferences.router, prefix="/api/v1")
+app.include_router(transactions.router, prefix="/api/v1")
