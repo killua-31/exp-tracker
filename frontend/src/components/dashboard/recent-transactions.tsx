@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/loading-skeleton'
 import { getTransactions, getCategories } from '@/lib/api'
 import { formatCurrency, getRelativeDate } from '@/lib/utils'
 
@@ -20,7 +21,26 @@ export function RecentTransactions() {
   const categoryMap = new Map(categories?.map((c) => [c.id, c]))
 
   if (loadingTxns) {
-    return <Card className="animate-pulse h-[360px]"><span /></Card>
+    return (
+      <Card>
+        <div className="flex items-center justify-between mb-4">
+          <Skeleton className="h-6 w-44" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+        <div className="space-y-3">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <div key={i} className="flex items-center gap-3">
+              <Skeleton className="h-3 w-3 rounded-full" />
+              <div className="flex-1 space-y-1.5">
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-3 w-16" />
+              </div>
+              <Skeleton className="h-4 w-16" />
+            </div>
+          ))}
+        </div>
+      </Card>
+    )
   }
 
   return (

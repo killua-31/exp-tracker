@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/loading-skeleton'
 import { useCreditCards } from '@/hooks/useAccounts'
 import { formatCurrency } from '@/lib/utils'
 
@@ -22,7 +23,12 @@ export function CreditCardsStrip() {
       <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-hide">
         {isLoading
           ? [0, 1, 2].map((i) => (
-              <Card key={i} className="min-w-[200px] animate-pulse h-24 shrink-0"><span /></Card>
+              <Card key={i} className="min-w-[200px] shrink-0">
+                <Skeleton className="h-4 w-28 mb-3" />
+                <Skeleton className="h-3 w-16 mb-1" />
+                <Skeleton className="h-1.5 w-full rounded-full" />
+                <Skeleton className="h-4 w-20 mt-2" />
+              </Card>
             ))
           : cards?.map((card) => {
               const utilization =

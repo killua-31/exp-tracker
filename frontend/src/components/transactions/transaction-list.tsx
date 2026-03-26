@@ -7,6 +7,7 @@ import { SearchBar } from './search-bar'
 import { TransactionFilters } from './transaction-filters'
 import { TransactionRow } from './transaction-row'
 import { EmptyState } from '@/components/ui/empty-state'
+import { Skeleton } from '@/components/ui/loading-skeleton'
 import type { Transaction } from '@/types'
 
 function getDateGroup(dateStr: string): string {
@@ -82,8 +83,20 @@ export function TransactionList() {
       <TransactionFilters filters={filters} onFilterChange={setFilters} />
 
       {isLoading && (
-        <div className="flex justify-center py-12">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent-200 border-t-accent-500" />
+        <div className="space-y-2">
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="flex items-center gap-3 rounded-xl bg-white px-4 py-3 shadow-card dark:bg-slate-800">
+              <Skeleton className="h-4 w-4 rounded-full" />
+              <div className="flex-1 space-y-1.5">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-3 w-20" />
+              </div>
+              <div className="space-y-1.5 text-right">
+                <Skeleton className="h-4 w-16 ml-auto" />
+                <Skeleton className="h-3 w-14 ml-auto" />
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { Card } from '@/components/ui/card'
 import { ProgressBar } from '@/components/ui/progress-bar'
+import { Skeleton } from '@/components/ui/loading-skeleton'
 import { useBudgetStatus } from '@/hooks/useAccounts'
 import { getCategories } from '@/lib/api'
 import { formatCurrency } from '@/lib/utils'
@@ -23,7 +24,26 @@ export function BudgetHealth() {
   const categoryMap = new Map(categories?.map((c) => [c.id, c]))
 
   if (loadingBudgets) {
-    return <Card className="animate-pulse h-[360px]"><span /></Card>
+    return (
+      <Card>
+        <div className="flex items-center justify-between mb-4">
+          <Skeleton className="h-6 w-32" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+        <div className="space-y-5">
+          {[0, 1, 2].map((i) => (
+            <div key={i}>
+              <div className="flex items-center justify-between mb-1">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-3 w-10" />
+              </div>
+              <Skeleton className="h-2 w-full rounded-full" />
+              <Skeleton className="h-3 w-32 mt-1" />
+            </div>
+          ))}
+        </div>
+      </Card>
+    )
   }
 
   const topBudgets = budgetStatuses?.slice(0, 3) ?? []

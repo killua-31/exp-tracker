@@ -2,6 +2,7 @@
 
 import { ArrowDownCircle, ArrowUpCircle, TrendingDown, TrendingUp } from 'lucide-react'
 import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/loading-skeleton'
 import { useDashboardSummary } from '@/hooks/useDashboard'
 import { formatCurrency } from '@/lib/utils'
 
@@ -9,7 +10,19 @@ export function MonthlyOverview() {
   const { data, isLoading } = useDashboardSummary()
 
   if (isLoading || !data) {
-    return <Card className="animate-pulse h-24"><span /></Card>
+    return (
+      <Card>
+        <div className="grid grid-cols-3 divide-x divide-slate-200 dark:divide-slate-700">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="flex flex-col items-center gap-2 px-4 py-1">
+              <Skeleton className="h-9 w-9 rounded-full" />
+              <Skeleton className="h-3 w-14" />
+              <Skeleton className="h-6 w-20" />
+            </div>
+          ))}
+        </div>
+      </Card>
+    )
   }
 
   const netPositive = data.monthly_net >= 0

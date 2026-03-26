@@ -16,7 +16,7 @@ const variantStyles: Record<ButtonVariant, string> = {
   primary:
     'rounded-full bg-accent-600 text-white hover:bg-accent-700 active:bg-accent-800 shadow-sm',
   secondary:
-    'rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800',
+    'rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800',
   ghost:
     'rounded-xl bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800',
 }
@@ -38,7 +38,7 @@ export function Button({
     <motion.button
       whileTap={{ scale: 0.97 }}
       className={cn(
-        'inline-flex items-center justify-center gap-2 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+        'inline-flex items-center justify-center gap-2 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 disabled:pointer-events-none disabled:opacity-50',
         variantStyles[variant],
         sizeStyles[size],
         className

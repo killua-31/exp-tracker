@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/loading-skeleton'
 import { useTrends } from '@/hooks/useDashboard'
 import { formatCurrency } from '@/lib/utils'
 
@@ -17,7 +18,12 @@ export function TrendChart() {
   const { data: trends, isLoading } = useTrends(6)
 
   if (isLoading) {
-    return <Card className="animate-pulse h-[360px]"><span /></Card>
+    return (
+      <Card>
+        <Skeleton className="h-6 w-36 mb-4" />
+        <Skeleton className="h-[250px] w-full rounded-xl" />
+      </Card>
+    )
   }
 
   const chartData = trends ?? []
@@ -64,7 +70,9 @@ export function TrendChart() {
               contentStyle={{
                 borderRadius: '0.75rem',
                 border: 'none',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                backgroundColor: 'var(--color-tooltip-bg, #fff)',
+                color: 'var(--color-tooltip-text, #1e293b)',
               }}
             />
             <Area

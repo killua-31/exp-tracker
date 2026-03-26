@@ -74,6 +74,24 @@
   }
 }
 
+/* Tooltip colors for Recharts */
+:root {
+  --color-tooltip-bg: #fff;
+  --color-tooltip-text: #1e293b;
+}
+
+.dark {
+  --color-tooltip-bg: #1e293b;
+  --color-tooltip-text: #f1f5f9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --color-tooltip-bg: #1e293b;
+    --color-tooltip-text: #f1f5f9;
+  }
+}
+
 /* Base styles */
 body {
   font-family: var(--font-sans);

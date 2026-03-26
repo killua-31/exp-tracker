@@ -2,6 +2,7 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'
 import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/loading-skeleton'
 import { useSpendingByCategory } from '@/hooks/useDashboard'
 import { formatCurrency } from '@/lib/utils'
 
@@ -13,7 +14,17 @@ export function SpendingChart() {
   const { data: spending, isLoading } = useSpendingByCategory(MONTH, YEAR)
 
   if (isLoading) {
-    return <Card className="animate-pulse h-[360px]"><span /></Card>
+    return (
+      <Card>
+        <Skeleton className="h-6 w-48 mb-4" />
+        <Skeleton className="h-[220px] w-full rounded-xl" />
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          {[0, 1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-5 w-full" />
+          ))}
+        </div>
+      </Card>
+    )
   }
 
   const chartData = spending ?? []
@@ -52,7 +63,9 @@ export function SpendingChart() {
                   contentStyle={{
                     borderRadius: '0.75rem',
                     border: 'none',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                    backgroundColor: 'var(--color-tooltip-bg, #fff)',
+                    color: 'var(--color-tooltip-text, #1e293b)',
                   }}
                 />
               </PieChart>

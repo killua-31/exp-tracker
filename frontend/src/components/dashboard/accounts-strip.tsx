@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/loading-skeleton'
 import { useAccounts } from '@/hooks/useAccounts'
 import { formatCurrency } from '@/lib/utils'
 
@@ -22,7 +23,15 @@ export function AccountsStrip() {
       <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-hide">
         {isLoading
           ? [0, 1, 2].map((i) => (
-              <Card key={i} className="min-w-[180px] animate-pulse h-20 shrink-0"><span /></Card>
+              <Card key={i} className="min-w-[180px] shrink-0">
+                <div className="flex items-center gap-3">
+                  <Skeleton className="h-9 w-9 rounded-full shrink-0" />
+                  <div className="min-w-0 space-y-1.5">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-5 w-24" />
+                  </div>
+                </div>
+              </Card>
             ))
           : accounts?.map((account) => (
               <div

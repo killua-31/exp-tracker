@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { ArrowDownCircle, ArrowUpCircle, Wallet } from 'lucide-react'
 import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/loading-skeleton'
 import { useDashboardSummary } from '@/hooks/useDashboard'
 import { formatCurrency } from '@/lib/utils'
 
@@ -13,7 +14,16 @@ export function SummaryCards() {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[0, 1, 2].map((i) => (
-          <Card key={i} className="animate-pulse h-28"><span /></Card>
+          <Card key={i}>
+            <div className="flex items-start justify-between">
+              <div className="space-y-2 flex-1">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-7 w-32" />
+                <Skeleton className="h-3 w-20" />
+              </div>
+              <Skeleton className="h-10 w-10 rounded-xl" />
+            </div>
+          </Card>
         ))}
       </div>
     )

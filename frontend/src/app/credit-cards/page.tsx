@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ProgressBar } from '@/components/ui/progress-bar'
 import { EmptyState } from '@/components/ui/empty-state'
+import { Skeleton } from '@/components/ui/loading-skeleton'
 import { CreditCardCard } from '@/components/credit-cards/credit-card-card'
 import { CreditCardFormModal } from '@/components/credit-cards/credit-card-form-modal'
 import { PayBillModal } from '@/components/credit-cards/pay-bill-modal'
@@ -46,8 +47,34 @@ export default function CreditCardsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent-500 border-t-transparent" />
+      <div className="max-w-lg mx-auto pb-24">
+        <div className="mb-6 flex items-center justify-between">
+          <Skeleton className="h-8 w-36" />
+          <Skeleton className="h-9 w-28 rounded-full" />
+        </div>
+        <Card className="mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-4 w-10" />
+          </div>
+          <Skeleton className="h-2.5 w-full rounded-full mb-3" />
+          <div className="flex justify-between">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-4 w-20" />
+          </div>
+        </Card>
+        <div className="space-y-4">
+          {[0, 1].map((i) => (
+            <Card key={i}>
+              <Skeleton className="h-5 w-32 mb-3" />
+              <Skeleton className="h-2 w-full rounded-full mb-2" />
+              <div className="flex justify-between">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     )
   }

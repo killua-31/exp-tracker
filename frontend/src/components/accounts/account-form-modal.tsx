@@ -171,7 +171,7 @@ export function AccountFormModal({ isOpen, onClose, account }: AccountFormModalP
                       key={c}
                       type="button"
                       onClick={() => setColor(c)}
-                      className={`h-8 w-8 rounded-full transition-transform ${color === c ? 'scale-110 ring-2 ring-offset-2 ring-slate-400' : ''}`}
+                      className={`h-8 w-8 rounded-full transition-transform ${color === c ? 'scale-110 ring-2 ring-offset-2 ring-slate-400 dark:ring-offset-slate-900' : ''}`}
                       style={{ backgroundColor: c }}
                     />
                   ))}

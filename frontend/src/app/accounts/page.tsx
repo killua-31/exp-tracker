@@ -5,6 +5,7 @@ import { Landmark, Plus } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/ui/empty-state'
+import { Skeleton } from '@/components/ui/loading-skeleton'
 import { AccountCard } from '@/components/accounts/account-card'
 import { AccountFormModal } from '@/components/accounts/account-form-modal'
 import { useAccounts } from '@/hooks/useAccounts'
@@ -35,8 +36,28 @@ export default function AccountsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent-500 border-t-transparent" />
+      <div className="max-w-lg mx-auto pb-24">
+        <div className="mb-6 flex items-center justify-between">
+          <Skeleton className="h-8 w-32" />
+          <Skeleton className="h-9 w-32 rounded-full" />
+        </div>
+        <Card className="mb-6">
+          <Skeleton className="h-4 w-24 mb-2" />
+          <Skeleton className="h-9 w-40" />
+        </Card>
+        <div className="space-y-3">
+          {[0, 1, 2].map((i) => (
+            <Card key={i}>
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-10 w-10 rounded-full shrink-0" />
+                <div className="flex-1 space-y-1.5">
+                  <Skeleton className="h-5 w-28" />
+                </div>
+                <Skeleton className="h-6 w-24" />
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     )
   }
