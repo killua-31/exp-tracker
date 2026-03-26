@@ -28,7 +28,7 @@ export function SpendingChart() {
   }
 
   const chartData = spending ?? []
-  const total = chartData.reduce((sum, item) => sum + item.amount, 0)
+  const total = chartData.reduce((sum, item) => sum + Number(item.amount), 0)
 
   return (
     <Card>

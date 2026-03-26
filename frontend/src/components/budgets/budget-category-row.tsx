@@ -14,8 +14,10 @@ interface BudgetCategoryRowProps {
 
 export function BudgetCategoryRow({ status, categories, onEdit, onDelete }: BudgetCategoryRowProps) {
   const category = categories.find((c) => c.id === status.budget.category_id)
-  const { spent, remaining, percentage } = status
-  const budgetAmount = status.budget.amount
+  const spent = Number(status.spent)
+  const remaining = Number(status.remaining)
+  const percentage = Number(status.percentage)
+  const budgetAmount = Number(status.budget.amount)
   const isOver = percentage > 100
 
   return (

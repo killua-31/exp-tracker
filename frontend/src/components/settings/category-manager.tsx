@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Pencil, Trash2, Plus, Check, X } from 'lucide-react'
+import { DynamicIcon } from '@/components/ui/dynamic-icon'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCategories } from '@/hooks/useTransactions'
 import { createCategory } from '@/lib/api'
@@ -72,8 +73,9 @@ export function CategoryManager() {
                 className="inline-block h-3 w-3 shrink-0 rounded-full"
                 style={{ backgroundColor: cat.color }}
               />
-              <span className="flex-1 text-sm text-slate-900 dark:text-slate-100">
-                {cat.icon} {cat.name}
+              <span className="flex-1 flex items-center gap-1.5 text-sm text-slate-900 dark:text-slate-100">
+                <DynamicIcon name={cat.icon} size={16} />
+                {cat.name}
               </span>
               {cat.is_default && (
                 <span className="text-xs text-slate-400 dark:text-slate-500">Default</span>
@@ -98,8 +100,9 @@ export function CategoryManager() {
                 className="inline-block h-3 w-3 shrink-0 rounded-full"
                 style={{ backgroundColor: cat.color }}
               />
-              <span className="flex-1 text-sm text-slate-900 dark:text-slate-100">
-                {cat.icon} {cat.name}
+              <span className="flex-1 flex items-center gap-1.5 text-sm text-slate-900 dark:text-slate-100">
+                <DynamicIcon name={cat.icon} size={16} />
+                {cat.name}
               </span>
               {cat.is_default && (
                 <span className="text-xs text-slate-400 dark:text-slate-500">Default</span>

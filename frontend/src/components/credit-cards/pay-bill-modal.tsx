@@ -26,7 +26,7 @@ export function PayBillModal({ isOpen, onClose, card }: PayBillModalProps) {
 
   useEffect(() => {
     if (card) {
-      setAmount(card.outstanding_balance.toString())
+      setAmount(String(Number(card.outstanding_balance)))
     }
     setSourceAccountId('')
   }, [card, isOpen])

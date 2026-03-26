@@ -13,10 +13,12 @@ interface CreditCardCardProps {
 }
 
 export function CreditCardCard({ card, onClick, onPayBill }: CreditCardCardProps) {
-  const utilization = card.credit_limit > 0
-    ? (card.outstanding_balance / card.credit_limit) * 100
+  const creditLimit = Number(card.credit_limit)
+  const outstandingBalance = Number(card.outstanding_balance)
+  const utilization = creditLimit > 0
+    ? (outstandingBalance / creditLimit) * 100
     : 0
-  const available = card.credit_limit - card.outstanding_balance
+  const available = creditLimit - outstandingBalance
 
   return (
     <div
@@ -80,7 +82,7 @@ export function CreditCardCard({ card, onClick, onPayBill }: CreditCardCardProps
       )}
 
       {/* Pay Bill button */}
-      {card.outstanding_balance > 0 && (
+      {outstandingBalance > 0 && (
         <button
           type="button"
           onClick={(e) => {

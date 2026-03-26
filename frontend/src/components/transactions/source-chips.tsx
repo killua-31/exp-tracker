@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import { DynamicIcon } from '@/components/ui/dynamic-icon'
 import type { Account, CreditCard, SourceType } from '@/types'
 
 interface SourceChipsProps {
@@ -11,12 +12,13 @@ interface SourceChipsProps {
   onSelect: (sourceType: SourceType, sourceId: string) => void
 }
 
-function abbreviateBalance(amount: number): string {
-  const abs = Math.abs(amount)
+function abbreviateBalance(amount: number | string): string {
+  const num = Number(amount)
+  const abs = Math.abs(num)
   if (abs >= 1000) {
-    return `$${(amount / 1000).toFixed(1)}K`
+    return `$${(num / 1000).toFixed(1)}K`
   }
-  return `$${amount.toFixed(0)}`
+  return `$${num.toFixed(0)}`
 }
 
 export function SourceChips({
@@ -43,7 +45,7 @@ export function SourceChips({
               : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300'
           )}
         >
-          <span className="text-sm">{acc.icon}</span>
+          <DynamicIcon name={acc.icon} size={14} />
           <span className="whitespace-nowrap">{acc.name}</span>
           <span className="text-slate-400 dark:text-slate-500">{abbreviateBalance(acc.balance)}</span>
         </button>
@@ -67,7 +69,7 @@ export function SourceChips({
               : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300'
           )}
         >
-          <span className="text-sm">{card.icon}</span>
+          <DynamicIcon name={card.icon} size={14} />
           <span className="whitespace-nowrap">{card.name}</span>
           <span className="text-slate-400 dark:text-slate-500">
             {abbreviateBalance(card.outstanding_balance)}

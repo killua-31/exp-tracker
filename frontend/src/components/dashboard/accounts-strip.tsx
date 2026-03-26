@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/loading-skeleton'
+import { DynamicIcon } from '@/components/ui/dynamic-icon'
 import { useAccounts } from '@/hooks/useAccounts'
 import { formatCurrency } from '@/lib/utils'
 
@@ -45,7 +46,7 @@ export function AccountsStrip() {
                       className="flex h-9 w-9 items-center justify-center rounded-full text-lg shrink-0"
                       style={{ backgroundColor: account.color + '20', color: account.color }}
                     >
-                      {account.icon}
+                      <DynamicIcon name={account.icon} size={18} />
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm text-slate-500 dark:text-slate-400 truncate">

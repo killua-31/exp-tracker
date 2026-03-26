@@ -17,7 +17,7 @@ export default function AccountsPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editAccount, setEditAccount] = useState<Account | undefined>()
 
-  const totalBalance = accounts.reduce((sum, a) => sum + a.balance, 0)
+  const totalBalance = accounts.reduce((sum, a) => sum + Number(a.balance), 0)
 
   function handleEdit(account: Account) {
     setEditAccount(account)

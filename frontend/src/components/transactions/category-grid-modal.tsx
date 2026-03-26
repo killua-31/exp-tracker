@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
+import { DynamicIcon } from '@/components/ui/dynamic-icon'
 import type { Category } from '@/types'
 
 interface CategoryGridModalProps {
@@ -61,10 +62,10 @@ export function CategoryGridModal({ isOpen, onClose, onSelect, categories }: Cat
                       className="flex flex-col items-center gap-1.5 rounded-xl p-3 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
                     >
                       <span
-                        className="flex h-10 w-10 items-center justify-center rounded-full text-lg"
+                        className="flex h-10 w-10 items-center justify-center rounded-full"
                         style={{ backgroundColor: cat.color + '22', color: cat.color }}
                       >
-                        {cat.icon}
+                        <DynamicIcon name={cat.icon} size={20} />
                       </span>
                       <span className="text-center text-[11px] font-medium leading-tight text-slate-700 dark:text-slate-300">
                         {cat.name}
@@ -89,10 +90,10 @@ export function CategoryGridModal({ isOpen, onClose, onSelect, categories }: Cat
                       className="flex flex-col items-center gap-1.5 rounded-xl p-3 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
                     >
                       <span
-                        className="flex h-10 w-10 items-center justify-center rounded-full text-lg"
+                        className="flex h-10 w-10 items-center justify-center rounded-full"
                         style={{ backgroundColor: cat.color + '22', color: cat.color }}
                       >
-                        {cat.icon}
+                        <DynamicIcon name={cat.icon} size={20} />
                       </span>
                       <span className="text-center text-[11px] font-medium leading-tight text-slate-700 dark:text-slate-300">
                         {cat.name}

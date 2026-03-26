@@ -31,9 +31,10 @@ export function BudgetOverview({ budgetStatus }: BudgetOverviewProps) {
     )
   }
 
-  const { spent, budget } = overall
-  const budgetAmount = budget.amount
-  const percentage = overall.percentage
+  const { budget } = overall
+  const spent = Number(overall.spent)
+  const budgetAmount = Number(budget.amount)
+  const percentage = Number(overall.percentage)
   const color = getRingColor(percentage)
 
   // SVG ring parameters
@@ -86,7 +87,7 @@ export function BudgetOverview({ budgetStatus }: BudgetOverviewProps) {
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
           {percentage > 100
             ? `Over budget by ${formatCurrency(spent - budgetAmount)}`
-            : `${formatCurrency(overall.remaining)} remaining`}
+            : `${formatCurrency(Number(overall.remaining))} remaining`}
         </p>
       </div>
     </Card>

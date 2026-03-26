@@ -21,8 +21,8 @@ export default function CreditCardsPage() {
   const [payCard, setPayCard] = useState<CreditCard | null>(null)
   const [payOpen, setPayOpen] = useState(false)
 
-  const totalUsed = cards.reduce((sum, c) => sum + c.outstanding_balance, 0)
-  const totalLimit = cards.reduce((sum, c) => sum + c.credit_limit, 0)
+  const totalUsed = cards.reduce((sum, c) => sum + Number(c.outstanding_balance), 0)
+  const totalLimit = cards.reduce((sum, c) => sum + Number(c.credit_limit), 0)
   const totalUtilization = totalLimit > 0 ? (totalUsed / totalLimit) * 100 : 0
 
   function handleEdit(card: CreditCard) {

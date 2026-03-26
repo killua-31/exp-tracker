@@ -25,7 +25,7 @@ export function MonthlyOverview() {
     )
   }
 
-  const netPositive = data.monthly_net >= 0
+  const netPositive = Number(data.monthly_net) >= 0
   const NetIcon = netPositive ? TrendingUp : TrendingDown
 
   const metrics = [

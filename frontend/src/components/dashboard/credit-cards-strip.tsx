@@ -32,8 +32,8 @@ export function CreditCardsStrip() {
             ))
           : cards?.map((card) => {
               const utilization =
-                card.credit_limit > 0
-                  ? Math.round((card.outstanding_balance / card.credit_limit) * 100)
+                Number(card.credit_limit) > 0
+                  ? Math.round((Number(card.outstanding_balance) / Number(card.credit_limit)) * 100)
                   : 0
               return (
                 <Card key={card.id} className="min-w-[200px] shrink-0">

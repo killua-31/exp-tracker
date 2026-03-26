@@ -77,7 +77,7 @@ export function BudgetHealth() {
                     {label}
                   </span>
                   <span className="text-xs text-slate-500 dark:text-slate-400">
-                    {Math.round(status.percentage)}%
+                    {Math.round(Number(status.percentage))}%
                   </span>
                 </div>
                 <ProgressBar value={status.percentage} />

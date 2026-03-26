@@ -1,7 +1,7 @@
 'use client'
 
-import { Wallet } from 'lucide-react'
 import { Card } from '@/components/ui/card'
+import { DynamicIcon } from '@/components/ui/dynamic-icon'
 import { Badge } from '@/components/ui/badge'
 import { formatCurrency } from '@/lib/utils'
 import type { Account } from '@/types'
@@ -26,7 +26,7 @@ export function AccountCard({ account, onClick }: AccountCardProps) {
           className="flex h-10 w-10 items-center justify-center rounded-full"
           style={{ backgroundColor: account.color + '22', color: account.color }}
         >
-          <Wallet className="h-5 w-5" />
+          <DynamicIcon name={account.icon} size={20} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">

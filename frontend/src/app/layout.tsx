@@ -18,6 +18,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function() {
+            var theme = localStorage.getItem('fintrack-theme') || 'system';
+            var isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (isDark) document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+          })()
+        `}} />
+      </head>
       <body className="bg-slate-50 font-sans antialiased dark:bg-slate-950 dark:text-slate-100">
         <Providers>
           <AppShell>{children}</AppShell>
