@@ -9,5 +9,13 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
+    @property
+    def cors_origins_list(self) -> list[str]:
+        """Parse CORS_ORIGINS into a list. Handles '*' as a wildcard."""
+        raw = self.cors_origins.strip()
+        if raw == "*":
+            return ["*"]
+        return [origin.strip() for origin in raw.split(",") if origin.strip()]
+
 
 settings = Settings()
